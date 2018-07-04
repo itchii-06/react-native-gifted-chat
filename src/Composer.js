@@ -8,6 +8,13 @@ import { MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER } from './Constant';
 import Color from './Color';
 
 export default class Composer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: null,
+    }
+    this._onChangeMessage = this._onChangeMessage.bind(this);
+  }
 
   onContentSizeChange(e) {
     const { contentSize } = e.nativeEvent;
@@ -25,8 +32,10 @@ export default class Composer extends React.Component {
     }
   }
 
-  onChangeText(text) {
-    this.props.onTextChanged(text);
+  _onChangeMessage(message){
+    const { onTextChanged } = this.props;
+    this.setState({message: message});
+    onTextChanged(message);
   }
 
   render() {
@@ -40,7 +49,7 @@ export default class Composer extends React.Component {
         multiline={this.props.multiline}
         onChange={(e) => this.onContentSizeChange(e)}
         onContentSizeChange={(e) => this.onContentSizeChange(e)}
-        onChangeText={(text) => this.onChangeText(text)}
+        onTextInput={(e) => this._onChangeMessage(e.nativeEvent.text)}
         style={[styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }]}
         autoFocus={this.props.textInputAutoFocus}
         value={this.props.text}
