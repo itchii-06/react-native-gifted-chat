@@ -24,6 +24,19 @@ export default class MessageContainer extends React.PureComponent {
     this.renderFooter = this.renderFooter.bind(this);
     this.renderLoadEarlier = this.renderLoadEarlier.bind(this);
     this.renderHeaderWrapper = this.renderHeaderWrapper.bind(this);
+    this._scrollToEnd = this._scrollToEnd.bind(this);
+  }
+
+  componentDidMount(){
+    // componentDidMountとFlatlistの描写に差があるため時間差を作る
+    // https://github.com/facebook/react-native/issues/13202
+    setTimeout(() => {
+      this._scrollToEnd();
+    }, 500);
+  }
+
+  componentDidUpdate(){
+    this._scrollToEnd();
   }
 
   renderFooter() {
@@ -52,6 +65,12 @@ export default class MessageContainer extends React.PureComponent {
   scrollTo(options) {
     if (this.flatListRef) {
       this.flatListRef.scrollToOffset(options);
+    }
+  }
+
+  _scrollToEnd(){
+    if (this.flatListRef && this.props.messages.length > 0) {
+      this.flatListRef.scrollToEnd();
     }
   }
 
