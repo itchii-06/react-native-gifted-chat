@@ -39,8 +39,9 @@ export default class Composer extends React.Component {
   }
 
   render() {
-    return (
-      <TextInput
+    if (Platform.OS === 'ios') {
+      return(
+        <TextInput
         testID={this.props.placeholder}
         accessible
         accessibilityLabel={this.props.placeholder}
@@ -49,7 +50,7 @@ export default class Composer extends React.Component {
         multiline={this.props.multiline}
         onChange={(e) => this.onContentSizeChange(e)}
         onContentSizeChange={(e) => this.onContentSizeChange(e)}
-        onTextInput={(e) => this._onChangeMessage(e.nativeEvent.text)}
+        onTextInput={(e) => this.onChangeText(e.nativeEvent.text)}
         style={[styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }]}
         autoFocus={this.props.textInputAutoFocus}
         value={this.props.text}
@@ -58,9 +59,30 @@ export default class Composer extends React.Component {
         keyboardAppearance={this.props.keyboardAppearance}
         {...this.props.textInputProps}
       />
-    );
+      );
+    } else {
+      return(
+        <TextInput
+            testID={this.props.placeholder}
+            accessible
+            accessibilityLabel={this.props.placeholder}
+            placeholder={this.props.placeholder}
+            placeholderTextColor={this.props.placeholderTextColor}
+            multiline={this.props.multiline}
+            onChange={(e) => this.onContentSizeChange(e)}
+            onContentSizeChange={(e) => this.onContentSizeChange(e)}
+            onChangeText={(text) => this.onChangeText(text)}
+            style={[styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }]}
+            autoFocus={this.props.textInputAutoFocus}
+            value={this.props.text}
+            enablesReturnKeyAutomatically
+            underlineColorAndroid="transparent"
+            keyboardAppearance={this.props.keyboardAppearance}
+            {...this.props.textInputProps}
+          />
+      );
+    }
   }
-
 }
 
 const styles = StyleSheet.create({
